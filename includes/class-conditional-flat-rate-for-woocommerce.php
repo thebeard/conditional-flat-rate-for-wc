@@ -21,7 +21,7 @@ if ( !class_exists( 'Conditional_Flat_Rate_For_WooCommerce' ) ) :
 		 * @access  public
 		 * @since 	1.0.0
 		 */
-		public static $uid = null;
+		public $uid = null;
 
 		/**
 		 * Let's construct!
