@@ -3,12 +3,14 @@
 class WC_Shipping_Conditional_Flat_Rate extends WC_Shipping_Flat_Rate {
 
 	private $parent_title = null;
+	private $text_domain;
 
 	public function __construct( $instance_id = 0 ) {
+		$this->text_domain           = 'wcscfr_custom';
 		$this->id                    = 'conditional_flat_rate';
 		$this->instance_id 			 = absint( $instance_id );
-		$this->method_title          = __( 'Conditional Flat Rate', $text_domain );
-		$this->method_description    = __( 'Lets you charge a fixed rate for shipping, conditionally ;)', $text_domain );
+		$this->method_title          = __( 'Conditional Flat Rate', $this->text_domain );
+		$this->method_description    = __( 'Lets you charge a fixed rate for shipping, conditionally ;)', $this->text_domain );
 		$this->parent_title			 = __( 'Flat Rate', 'woocommerce' );
 		$this->supports              = array(
 			'shipping-zones',
@@ -59,12 +61,11 @@ class WC_Shipping_Conditional_Flat_Rate extends WC_Shipping_Flat_Rate {
 				'title' 		=> __( 'Cost', 'woocommerce' ),
 				'type' 			=> 'text',
 				'placeholder'	=> '',
-				'description'	=> $cost_desc,
 				'default'		=> '0',
 				'desc_tip'		=> true,
 			),
 			'requires' => array(
-				'title'   => __( 'Shipping method requires...', $text_domain ),
+				'title'   => __( 'Shipping method requires...', $this->text_domain ),
 				'type'    => 'select',
 				'class'   => 'wc-enhanced-select',
 				'default' => '',
@@ -73,25 +74,25 @@ class WC_Shipping_Conditional_Flat_Rate extends WC_Shipping_Flat_Rate {
 					'coupon'     => __( 'A valid coupon', 'woocommerce' ),
 					'min_amount' => __( 'A minimum order amount', 'woocommerce' ),
 					'max_amount' => __( 'A maximum order amount', 'woocommerce' ),
-					'either'     => __( 'A minimum/maximum order amount OR a coupon', $text_domain ),
-					'both'       => __( 'A minimum/maximum order amount AND a coupon', $text_domain ),
+					'either'     => __( 'A minimum/maximum order amount OR a coupon', $this->text_domain ),
+					'both'       => __( 'A minimum/maximum order amount AND a coupon', $this->text_domain ),
 				),
 				'desc_tip'    => true,
-				'description' => __( 'In the event that one of the last two options are selected, make sure that undesired order amount (min or max) is set to 0 and the other is set to required value.', $text_domain )
+				'description' => __( 'In the event that one of the last two options are selected, make sure that undesired order amount (min or max) is set to 0 and the other is set to required value.', $this->text_domain )
 			),
 			'min_amount' => array(
 				'title'       => __( 'Minimum order amount', 'woocommerce' ),
 				'type'        => 'price',
 				'placeholder' => wc_format_localized_price( 0 ),
-				'description' => __( 'Users will need to spend this amount to activate this shipping method (if enabled above).', $text_domain ),
+				'description' => __( 'Users will need to spend this amount to activate this shipping method (if enabled above).', $this->text_domain ),
 				'default'     => '0',
 				'desc_tip'    => true,
 			),
 			'max_amount' => array(
-				'title'       => __( 'Maximum order amount', $text_domain ),
+				'title'       => __( 'Maximum order amount', $this->text_domain ),
 				'type'        => 'price',
 				'placeholder' => wc_format_localized_price( 0 ),
-				'description' => __( 'When a user has spent this much, this method will be available only (if enabled above).', $text_domain ),
+				'description' => __( 'When a user has spent this much, this method will be available only (if enabled above).', $this->text_domain ),
 				'default'     => '0',
 				'desc_tip'    => true,
 			),
