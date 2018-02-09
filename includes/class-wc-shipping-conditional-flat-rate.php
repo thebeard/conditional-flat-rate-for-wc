@@ -17,7 +17,7 @@ class WC_Shipping_Conditional_Flat_Rate extends WC_Shipping_Flat_Rate {
 			'instance-settings',
 			'instance-settings-modal',
 		);
-		$this->init();		
+		$this->init();
 	}
 
 	public function init() {
@@ -181,4 +181,50 @@ class WC_Shipping_Conditional_Flat_Rate extends WC_Shipping_Flat_Rate {
 
 		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package );
 	}
+
+	/**
+	 * Evaluate a cost from a sum/string.
+	 * @param  string $sum
+	 * @param  array  $args
+	 * @return string
+	 */
+	protected function evaluate_cost( $sum, $args = array() ) {
+		include_once( WC()->plugin_path() . '/includes/libraries/class-wc-eval-math.php' );
+
+		// Allow 3rd parties to process shipping cost arguments
+		$args           = apply_filters( 'woocommerce_evaluate_shipping_cost_args', $args, $sum, $this );
+		$locale         = localeconv();
+		$decimals       = array( wc_get_price_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'], ',' );
+		$this->fee_cost = $args['cost'];
+
+		// Expand shortcodes
+		add_shortcode( 'fee', array( $this, 'fee' ) );
+
+		$sum = do_shortcode( str_replace(
+			array(
+				'[qty]',
+				'[cost]',
+			),
+			array(
+				$args['qty'],
+				$args['cost'],
+			),
+			eval( 'return ' . str_replace( '{subtotal}', $this->fee_cost, $sum ) . ';' )
+		) );
+
+		remove_shortcode( 'fee', array( $this, 'fee' ) );
+
+		// Remove whitespace from string
+		$sum = preg_replace( '/\s+/', '', $sum );
+
+		// Remove locale from string
+		$sum = str_replace( $decimals, '.', $sum );
+
+		// Trim invalid start/end characters
+		$sum = rtrim( ltrim( $sum, "\t\n\r\0\x0B+*/" ), "\t\n\r\0\x0B+-*/" );
+
+		// Do the math
+		return $sum ? WC_Eval_Math::evaluate( $sum ) : 0;
+	}
+	
 }

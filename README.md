@@ -6,3 +6,7 @@ This plugin adds another, slightly altered, instance of the Flat Rate Shipping M
 ### Note ###
 
 The current version focuses on the minimum/maximum criteria and the coupon functionality has not been tested in full. This is a work in progress. Please report any issues.
+
+The current version (now) also changes the **Cost** field to accept a Math expression, rather than just a static cost price. Also a `{subtotal}` tag is available within this field. To add $50 + 20% of subtotal, you could insert:
+
+`150 + ( {subtotal} * 0.2 )`

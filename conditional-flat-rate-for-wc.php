@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Conditional Flat Rate for WooCommerce
  * Description: Adds conditional Flat Rate shipping method for WooCommerce
- * Version: 0.1
+ * Version: 0.2
  * Author: Theunis Cilliers
  * Author URI: http://digitalreliance.co.za
  * Contributors: Hugh Lashbrooke
